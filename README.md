@@ -37,7 +37,7 @@ To set up the project locally, follow these steps:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com//event-reminder-client.git
+   git clone https://github.com/touhi13/event-reminder-client.git
    cd event-reminder-client
    ```
 
