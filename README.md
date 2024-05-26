@@ -4,6 +4,7 @@ Event Reminder Client is a web application that allows users to create, manage, 
 
 ## Features
 
+- Login
 - Add new events
 - Edit existing events
 - Delete events
@@ -20,7 +21,6 @@ Event Reminder Client is a web application that allows users to create, manage, 
 - React Hook Form
 - Yup (for form validation)
 - Tailwind CSS (for styling)
-- Papa Parse (for CSV parsing)
 - React Router
 
 ## Prerequisites
@@ -62,6 +62,13 @@ To set up the project locally, follow these steps:
 
    The application will be available at `http://localhost:5173`.
 
+## Login Credentials
+
+Use the following credentials to log in:
+
+- Email: admin@gmail.com
+- Password: 12345678
+
 ## CSV Import Feature
 
 The application allows users to import events from a CSV file. The CSV file should have the following columns:
@@ -86,3 +93,11 @@ Code Review,Review latest code changes,2024-06-03 09:00:00,"developer1@example.c
 Product Launch,Launch the new product version,2024-06-04 12:00:00,"marketing@example.com,sales@example.com",false
 Team Building Activity,Outdoor activities for team bonding,2024-06-05 15:00:00,"team@example.com",false
 ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit any issues or pull requests.
+
+## License
+
+This project is open-source and available under the [MIT License](LICENSE).
