@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 const PublicRouter = ({ children }) => {
     const isLoggedIn = useAuth();
 
-    return !isLoggedIn ? children : <Navigate to={'/src'} />;
+    return !isLoggedIn ? children : <Navigate to={'/'} />;
 }
 
 export default PublicRouter;
