@@ -134,10 +134,10 @@ const Home = () => {
                             <tr key={event.id} className="bg-white">
                                 <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{event.event_id}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{event.title}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{event.description}</td>
+                                <td className="px-6 py-4 break-words">{event.title}</td>
+                                <td className="px-6 py-4 break-words">{event.description}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{new Date(event.event_date).toLocaleString()}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{event.reminder_recipients.join(', ')}</td>
+                                <td className="px-6 py-4 break-words">{event.reminder_recipients.join(', ')}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${event.completed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
                                         {event.completed ? 'Complete' : 'Upcoming'}

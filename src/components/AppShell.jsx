@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../features/auth/authApi';
 import { userLoggedOut } from '../features/auth/authSlice';
 
@@ -24,8 +24,9 @@ const AppShell = () => {
         <div>
             <nav className="bg-gray-800 p-4">
                 <div className="container mx-auto flex justify-between items-center">
-                    <h1 className="text-white text-xl">Event Reminder</h1>
-                    <button
+                    <Link to="/" className="text-white text-xl">
+                        Event Reminder
+                    </Link>                    <button
                         onClick={handleLogout}
                         className="bg-red-500 text-white px-4 py-2 rounded"
                     >
