@@ -35,11 +35,11 @@ const Home = () => {
     const handleStatusChange = async (id) => {
         const confirmed = window.confirm('Are you sure you want to update the status of this event?');
         if (confirmed) {
-          await updateStatus({ id, cacheKey });
+            await updateStatus({ id, cacheKey });
         } else {
-          console.log('Status update canceled.');
+            console.log('Status update canceled.');
         }
-      };
+    };
 
     const handleImport = async (e) => {
         const file = e.target.files[0];
@@ -115,49 +115,50 @@ const Home = () => {
                     <option value="upcoming">Upcoming</option>
                 </select>
             </div>
-
-            <table className="min-w-full divide-y divide-gray-200">
-                <thead>
-                    <tr>
-                        <th> Serial</th>
-                        <th>Event ID</th>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Event Date</th>
-                        <th>Reminder Recipients</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {events.data.map((event, index) => (
-                        <tr key={event.id} className="bg-white">
-                            <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{event.event_id}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{event.title}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{event.description}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{new Date(event.event_date).toLocaleString()}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{event.reminder_recipients.join(', ')}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${event.completed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                                    {event.completed ? 'Complete' : 'Upcoming'}
-                                </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap flex items-center space-x-2">
-                                <button onClick={() => handleStatusChange(event.id, 'complete')} className="text-blue-600 hover:text-blue-900">
-                                    <CheckIcon className="h-5 w-5" />
-                                </button>
-                                <Link to={`/edit-event/${event.id}`} className="text-indigo-600 hover:text-indigo-900">
-                                    <PencilIcon className="h-5 w-5" />
-                                </Link>
-                                <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(event.id)}>
-                                    <TrashIcon className="h-5 w-5" />
-                                </button>
-                            </td>
+            <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            <th> Serial</th>
+                            <th>Event ID</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Event Date</th>
+                            <th>Reminder Recipients</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {events.data.map((event, index) => (
+                            <tr key={event.id} className="bg-white">
+                                <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{event.event_id}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{event.title}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{event.description}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{new Date(event.event_date).toLocaleString()}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{event.reminder_recipients.join(', ')}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${event.completed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                        {event.completed ? 'Complete' : 'Upcoming'}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap flex items-center space-x-2">
+                                    <button onClick={() => handleStatusChange(event.id, 'complete')} className="text-blue-600 hover:text-blue-900">
+                                        <CheckIcon className="h-5 w-5" />
+                                    </button>
+                                    <Link to={`/edit-event/${event.id}`} className="text-indigo-600 hover:text-indigo-900">
+                                        <PencilIcon className="h-5 w-5" />
+                                    </Link>
+                                    <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(event.id)}>
+                                        <TrashIcon className="h-5 w-5" />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
             <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
                 <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                     <div>
