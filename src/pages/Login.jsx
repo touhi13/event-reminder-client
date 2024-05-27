@@ -13,7 +13,7 @@ const schema = yup.object().shape({
 const Login = () => {
     const [isLoader, setIsLoader] = useState(false);
 
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { control, handleSubmit, formState: { errors }, setError } = useForm({
         resolver: yupResolver(schema),
     });
 
@@ -27,9 +27,9 @@ const Login = () => {
         if (response.error) {
             const errorMessage = response.error.data.message || 'An error occurred';
 
-            form.setError('email', { message: errorMessage });
-            form.setError('password', { message: errorMessage });
-            setIsLoading(false);
+            setError('email', { message: errorMessage });
+            setError('password', { message: errorMessage });
+            setIsLoader(false);
         }
     };
 
