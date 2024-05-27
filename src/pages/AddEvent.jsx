@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useAddEventMutation } from '../features/event/eventApi';
@@ -6,6 +6,8 @@ import EventForm from '../components/form/EventForm';
 // import EventForm from './EventForm';
 
 const AddEvent = () => {
+    const [isLoader, setIsLoader] = useState(false);
+
     const cacheKey = useSelector((state) => state.cacheKey.event);
     const navigate = useNavigate();
     const [addEvent, { isLoading, isError, error, isSuccess }] = useAddEventMutation();
@@ -19,6 +21,7 @@ const AddEvent = () => {
     };
 
     const onSubmit = async (data) => {
+        setIsLoader(true)
         const newEvent = {
             title: data.title,
             description: data.description,
@@ -27,11 +30,15 @@ const AddEvent = () => {
         };
         if (!navigator.onLine) {
             const offlineEvents = JSON.parse(localStorage.getItem('offlineEvents')) || [];
-            offlineEvents.push({ newEvent, cacheKey });
+            offlineEvents.push({ newEvent: { ...newEvent, offline: true }, cacheKey });
             localStorage.setItem('offlineEvents', JSON.stringify(offlineEvents));
+
+            navigate('/')
         } else {
             await addEvent({ newEvent, cacheKey });
         }
+        setIsLoader(false)
+
     };
 
     useEffect(() => {
@@ -57,7 +64,7 @@ const AddEvent = () => {
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Add Event</h1>
-            <EventForm onSubmit={onSubmit} serverErrors={isError ? error.data.errors : null} />
+            <EventForm onSubmit={onSubmit} serverErrors={isError ? error.data.errors : null} loader={isLoader} />
         </div>
     );
 };

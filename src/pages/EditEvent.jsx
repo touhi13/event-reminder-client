@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetEventQuery, useUpdateEventMutation } from '../features/event/eventApi';
 import EventForm from '../components/form/EventForm';
 import { useSelector } from 'react-redux';
 
 const EditEvent = () => {
+    const [isLoader, setIsLoader] = useState(false);
+
     const { id } = useParams();
     const cacheKey = useSelector((state) => state.cacheKey.event);
     const navigate = useNavigate();
@@ -33,6 +35,7 @@ const EditEvent = () => {
     };
 
     const onSubmit = async (data) => {
+        setIsLoader(true)
         const updatedEvent = {
             title: data.title,
             description: data.description,
@@ -40,6 +43,7 @@ const EditEvent = () => {
             reminder_recipients: data.reminderRecipients.split(',').map(email => email.trim()),
         };
         await updateEvent({ id, updatedEvent, cacheKey });
+        setIsLoader(false)
     };
 
 
@@ -47,7 +51,7 @@ const EditEvent = () => {
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Edit Event</h1>
-            <EventForm onSubmit={onSubmit} defaultValues={defaultValues} serverErrors={isUpdateError ? updateError.data.errors : null} />
+            <EventForm onSubmit={onSubmit} defaultValues={defaultValues} serverErrors={isUpdateError ? updateError.data.errors : null} loader={isLoader} />
         </div>
     );
 };

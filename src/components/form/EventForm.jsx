@@ -18,7 +18,7 @@ const schema = yup.object().shape({
         }),
 });
 
-const EventForm = ({ onSubmit, defaultValues, serverErrors }) => {
+const EventForm = ({ onSubmit, defaultValues, serverErrors, loader }) => {
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues
@@ -44,8 +44,9 @@ const EventForm = ({ onSubmit, defaultValues, serverErrors }) => {
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded"
             >
-                Save Event
+                {defaultValues ? (loader ? "Updating..." : "Update Event") : (loader ? "Saving..." : "Save Event")}
             </button>
+
         </form>
     );
 };

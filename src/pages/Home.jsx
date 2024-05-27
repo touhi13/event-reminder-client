@@ -18,6 +18,8 @@ const Home = () => {
     const [deleteEvent] = useDeleteEventMutation();
     const [updateStatus] = useUpdateStatusMutation();
 
+    const offlineEvents = JSON.parse(localStorage.getItem('offlineEvents')) || [];
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -27,6 +29,12 @@ const Home = () => {
     }
 
     let events = data?.data || [];
+
+    // console.log(events);
+
+   const combineEvents = [...offlineEvents.map(event => event.newEvent), ...events.data];
+
+    console.log(events)
 
     const handleStatusChange = async (id) => {
         const confirmed = window.confirm('Are you sure you want to update the status of this event?');
@@ -126,13 +134,17 @@ const Home = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {events.data.map((event, index) => (
+                        {combineEvents.map((event, index) => (
                             <tr key={event.id} className="bg-white">
                                 <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{event.event_id}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    {event.offline ? "Offline: ID TBD on sync" : event.event_id}
+                                </td>
                                 <td className="px-6 py-4 break-words">{event.title}</td>
                                 <td className="px-6 py-4 break-words">{event.description}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{new Date(event.event_date).toLocaleString()}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    {new Date(event.event_date).toLocaleString()}
+                                </td>
                                 <td className="px-6 py-4 break-words">{event.reminder_recipients.join(', ')}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${event.completed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
@@ -140,17 +152,23 @@ const Home = () => {
                                     </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap flex items-center space-x-2">
-                                    <button onClick={() => handleStatusChange(event.id, 'complete')} className="text-blue-600 hover:text-blue-900">
-                                        <CheckIcon className="h-5 w-5" />
-                                    </button>
-                                    <Link to={`/edit-event/${event.id}`} className="text-indigo-600 hover:text-indigo-900">
-                                        <PencilIcon className="h-5 w-5" />
-                                    </Link>
-                                    <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(event.id)}>
-                                        <TrashIcon className="h-5 w-5" />
-                                    </button>
+                                    {!event.offline && (
+                                        <>
+                                            <button onClick={() => handleStatusChange(event.id, 'complete')} className="text-blue-600 hover:text-blue-900">
+                                                <CheckIcon className="h-5 w-5" />
+                                            </button>
+                                            <Link to={`/edit-event/${event.id}`} className="text-indigo-600 hover:text-indigo-900">
+                                                <PencilIcon className="h-5 w-5" />
+                                            </Link>
+                                            <button className="text-red-600 hover:text-red-900" onClick={() => handleDelete(event.id)}>
+                                                <TrashIcon className="h-5 w-5" />
+                                            </button>
+                                        </>
+                                    )}
                                 </td>
                             </tr>
+
+
                         ))}
                     </tbody>
                 </table>
