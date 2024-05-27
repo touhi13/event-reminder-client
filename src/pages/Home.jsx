@@ -30,16 +30,15 @@ const Home = () => {
 
     let events = data?.data || [];
 
-    // console.log(events);
-
+    // Combine offline events with fetched events
    const combineEvents = [...offlineEvents.map(event => event.newEvent), ...events.data];
 
-    console.log(events)
+
 
     const handleStatusChange = async (id) => {
         const confirmed = window.confirm('Are you sure you want to update the status of this event?');
         if (confirmed) {
-            await updateStatus({ id, cacheKey });
+            await updateStatus({ id, cacheKey });// Update event status if confirmed
         } else {
             console.log('Status update canceled.');
         }
@@ -47,11 +46,11 @@ const Home = () => {
 
     const handleImport = async (e) => {
         const file = e.target.files[0];
-        console.log(file)
+        // console.log(file)
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
-            await importEvent({ formData, cacheKey })
+            await importEvent({ formData, cacheKey }) // Import events from the selected CSV file
         }
     };
 
@@ -66,6 +65,7 @@ const Home = () => {
             key: 'event', payload: { "status": e.target.value }
         }))
     }
+    
     const handlePagination = (pageNumber) => {
         dispatch(updateCacheKey({
             key: 'event',
