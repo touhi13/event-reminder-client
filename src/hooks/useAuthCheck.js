@@ -15,7 +15,7 @@ export default function useAuthCheck() {
 
 
             if (auth.accessToken && auth.user) {
-                console.log(auth)
+                // console.log(auth)
                 dispatch(
                     userLoggedIn({
                         accessToken: auth.accessToken,

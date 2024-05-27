@@ -1,5 +1,4 @@
-import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import TitleField from '../ui/TitleField';
@@ -11,21 +10,36 @@ const schema = yup.object().shape({
     title: yup.string().required('Title is required'),
     description: yup.string(),
     eventDate: yup.string().required('Event Date is required'),
-    reminderRecipients: yup.string(),
+    reminderRecipients: yup.string()
+        .required('Reminder Recipients are required')
+        .test('emails', 'All reminder recipients must be valid email addresses', (value) => {
+            const emails = value.split(',').map(email => email.trim());
+            return emails.every(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+        }),
 });
 
-const EventForm = ({ onSubmit, defaultValues }) => {
+const EventForm = ({ onSubmit, defaultValues, serverErrors }) => {
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues
     });
 
+    const combinedErrors = {
+        ...errors,
+        ...(serverErrors && {
+            title: serverErrors.title && { message: serverErrors.title[0] },
+            description: serverErrors.description && { message: serverErrors.description[0] },
+            eventDate: serverErrors.event_date && { message: serverErrors.event_date[0] },
+            reminderRecipients: serverErrors.reminder_recipients && { message: serverErrors.reminder_recipients[0] },
+        })
+    };
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <TitleField control={control} errors={errors} />
-            <DescriptionField control={control} errors={errors} />
-            <EventDateField control={control} errors={errors} />
-            <ReminderRecipientsField control={control} errors={errors} />
+            <TitleField control={control} errors={combinedErrors} />
+            <DescriptionField control={control} errors={combinedErrors} />
+            <EventDateField control={control} errors={combinedErrors} />
+            <ReminderRecipientsField control={control} errors={combinedErrors} />
             <button
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -37,3 +51,5 @@ const EventForm = ({ onSubmit, defaultValues }) => {
 };
 
 export default EventForm;
+
+

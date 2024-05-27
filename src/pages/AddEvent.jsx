@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useAddEventMutation } from '../features/event/eventApi';
 import EventForm from '../components/form/EventForm';
@@ -7,9 +7,8 @@ import EventForm from '../components/form/EventForm';
 
 const AddEvent = () => {
     const cacheKey = useSelector((state) => state.cacheKey.event);
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [addEvent, { isLoading, isError, error }] = useAddEventMutation();
+    const [addEvent, { isLoading, isError, error, isSuccess }] = useAddEventMutation();
 
     const syncData = async () => {
         const events = JSON.parse(localStorage.getItem('offlineEvents')) || [];
@@ -19,7 +18,7 @@ const AddEvent = () => {
         localStorage.removeItem('offlineEvents');
     };
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         const newEvent = {
             title: data.title,
             description: data.description,
@@ -31,9 +30,8 @@ const AddEvent = () => {
             offlineEvents.push({ newEvent, cacheKey });
             localStorage.setItem('offlineEvents', JSON.stringify(offlineEvents));
         } else {
-            addEvent({ newEvent, cacheKey });
+            await addEvent({ newEvent, cacheKey });
         }
-        navigate('/');
     };
 
     useEffect(() => {
@@ -48,10 +46,18 @@ const AddEvent = () => {
         };
     }, [navigator.onLine]);
 
+
+    useEffect(() => {
+        if (isSuccess) {
+            navigate('/')
+        }
+    }, [isSuccess])
+
+    // console.log(isError, error);
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Add Event</h1>
-            <EventForm onSubmit={onSubmit} />
+            <EventForm onSubmit={onSubmit} serverErrors={isError ? error.data.errors : null} />
         </div>
     );
 };

@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 import { useDeleteEventMutation, useGetEventsQuery, useImportEventsMutation, useUpdateStatusMutation } from '../features/event/eventApi';
 import { updateCacheKey } from '../features/cacheKey/cacheKeySlice';
 import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-// import { CheckIcon, PencilAltIcon, TrashIcon } from 'heroicons/react/outline';
-
 
 const Home = () => {
     const fileInputRef = useRef(null);
@@ -29,8 +27,6 @@ const Home = () => {
     }
 
     let events = data?.data || [];
-
-
 
     const handleStatusChange = async (id) => {
         const confirmed = window.confirm('Are you sure you want to update the status of this event?');
@@ -197,8 +193,6 @@ const Home = () => {
                             )}
                         </nav>
                     </div>
-
-
                 </div>
             </div>
         </div>

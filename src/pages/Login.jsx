@@ -2,6 +2,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useLoginMutation } from '../features/auth/authApi';
+import { useState } from 'react';
 
 // Validation schema
 const schema = yup.object().shape({
@@ -10,6 +11,8 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
+    const [isLoader, setIsLoader] = useState(false);
+
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
     });
@@ -17,11 +20,17 @@ const Login = () => {
     const [login, { data, isLoading, isError, error }] = useLoginMutation();
 
 
-    const onSubmit = async(data) => {
-        // Handle login logic here
-        console.log('Login data:', data);
+    const onSubmit = async (data) => {
+        setIsLoader(true);
+        const response = await login(data)
 
-        await login(data);
+        if (response.error) {
+            const errorMessage = response.error.data.message || 'An error occurred';
+
+            form.setError('email', { message: errorMessage });
+            form.setError('password', { message: errorMessage });
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -65,7 +74,7 @@ const Login = () => {
                         type="submit"
                         className="bg-blue-500 text-white w-full py-2 rounded"
                     >
-                        Login
+                        {isLoader ? "Logging..." : "Login"}
                     </button>
                 </form>
             </div>
